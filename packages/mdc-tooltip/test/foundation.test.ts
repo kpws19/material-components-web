@@ -61,6 +61,16 @@ describe('MDCTooltipFoundation', () => {
     expect(mockAdapter.addClass).toHaveBeenCalledWith(CssClasses.SHOWING);
   });
 
+  it('#show leaves aria-hidden="true" attribute on tooltips intended to be hidden from screenreader',
+     () => {
+       const {foundation, mockAdapter} =
+           setUpFoundationTest(MDCTooltipFoundation);
+       foundation.show(true);
+       expect(mockAdapter.setAttribute)
+           .not.toHaveBeenCalledWith('aria-hidden', 'false');
+       expect(mockAdapter.addClass).toHaveBeenCalledWith(CssClasses.SHOWING);
+     });
+
   it('#show adds SHOWN and SHOWN_TRANSITION class after rAF', () => {
     const {foundation, mockAdapter} = setUpFoundationTest(MDCTooltipFoundation);
     foundation.show();

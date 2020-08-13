@@ -75,15 +75,15 @@ export class MDCTooltipFoundation extends MDCFoundation<MDCTooltipAdapter> {
     };
   }
 
-  handleAnchorMouseEnter() {
-    this.show();
+  handleAnchorMouseEnter(hideFromScreenreader?: boolean) {
+    this.show(hideFromScreenreader);
   }
 
-  handleAnchorFocus() {
+  handleAnchorFocus(hideFromScreenreader?: boolean) {
     // TODO(b/157075286): Need to add some way to distinguish keyboard
     // navigation focus events from other focus events, and only show the
     // tooltip on the former of these events.
-    this.show();
+    this.show(hideFromScreenreader);
   }
 
   handleAnchorMouseLeave() {
@@ -110,7 +110,7 @@ export class MDCTooltipFoundation extends MDCFoundation<MDCTooltipAdapter> {
     }
   }
 
-  show() {
+  show(hideFromScreenreader?: boolean) {
     this.clearHideTimeout();
 
     if (this.isShown) {
@@ -118,7 +118,9 @@ export class MDCTooltipFoundation extends MDCFoundation<MDCTooltipAdapter> {
     }
 
     this.isShown = true;
-    this.adapter.setAttribute('aria-hidden', 'false');
+    if (!hideFromScreenreader) {
+      this.adapter.setAttribute('aria-hidden', 'false');
+    }
     this.adapter.removeClass(HIDE);
     this.adapter.addClass(SHOWING);
     const {top, left} = this.calculateTooltipDistance();
